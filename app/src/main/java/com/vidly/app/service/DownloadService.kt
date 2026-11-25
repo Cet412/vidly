@@ -4,6 +4,7 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import android.util.Log
+import com.vidly.app.BuildConfig
 import com.vidly.app.data.repository.DownloadRepository
 import com.vidly.app.data.repository.DownloadResult
 import kotlinx.coroutines.CoroutineScope
@@ -23,7 +24,7 @@ class DownloadService : Service() {
             return START_NOT_STICKY
         }
 
-        Log.d(TAG, "mulai download dari service: $url")
+        if (BuildConfig.DEBUG) Log.d(TAG, "mulai download dari service: $url")
         scope.launch(Dispatchers.IO) {
             val result = repo.downloadVideo(applicationContext, url)
             when (result) {

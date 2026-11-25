@@ -33,7 +33,7 @@ sealed interface DownloadResult {
 class DownloadRepository {
 
     suspend fun downloadVideo(context: Context, url: String): DownloadResult = withContext(Dispatchers.IO) {
-        Log.d(TAG, "mulai download url=$url")
+        if (BuildConfig.DEBUG) Log.d(TAG, "mulai download url=$url")
         val notif = NotificationHelper(context)
         val downloadManager = DownloadManager.getInstance()
         val downloadId = downloadManager.addDownload(url, url)
@@ -117,7 +117,7 @@ class DownloadRepository {
 
         Log.d(TAG, "POST $endpoint")
         ApiClient.httpClient.newCall(request).execute().use { response ->
-            Log.d(TAG, "response code=${response.code} contentType=${response.header("Content-Type")} length=${response.header("Content-Length")}")
+            if (BuildConfig.DEBUG) Log.d(TAG, "response code=${response.code} contentType=${response.header("Content-Type")} length=${response.header("Content-Length")}")
 
             if (response.code == 429) {
                 val retryAfter = response.header("Retry-After")?.toIntOrNull() ?: 3600
